@@ -2,8 +2,8 @@ package runner
 
 import (
 	"fmt"
-
 	"github.com/AlexeyYurko/advent-of-code-2024/internal/solutions/day01"
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/solutions/day02"
 )
 
 type Result struct {
@@ -42,6 +42,8 @@ func getSolver(day int) (Solver, error) {
 	switch day {
 	case 1:
 		return day01.New(), nil
+	case 2:
+		return day02.New(), nil
 	default:
 		return nil, fmt.Errorf("invalid day: %d", day)
 	}
