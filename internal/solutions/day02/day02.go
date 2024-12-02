@@ -13,7 +13,7 @@ type Solver struct {
 }
 
 func New() *Solver {
-	input, _ := os.ReadFile(filepath.Join("internal", "solutions", "day02", "input_.txt"))
+	input, _ := os.ReadFile(filepath.Join("internal", "solutions", "day02", "input.txt"))
 	return &Solver{input: string(input)}
 }
 
