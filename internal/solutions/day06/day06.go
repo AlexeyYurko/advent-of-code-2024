@@ -22,13 +22,13 @@ var left = directionType{-1, 0}
 
 var directions = []directionType{up, right, down, left}
 
-type Solver struct {
-	input string
-}
-
 type VisitedState struct {
 	point     Point
 	direction int
+}
+
+type Solver struct {
+	input string
 }
 
 func New() *Solver {
