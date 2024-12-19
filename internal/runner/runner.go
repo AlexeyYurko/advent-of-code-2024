@@ -20,6 +20,7 @@ import (
 	"github.com/AlexeyYurko/advent-of-code-2024/internal/solutions/day16"
 	"github.com/AlexeyYurko/advent-of-code-2024/internal/solutions/day17"
 	"github.com/AlexeyYurko/advent-of-code-2024/internal/solutions/day18"
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/solutions/day19"
 )
 
 type Result struct {
@@ -92,6 +93,8 @@ func getSolver(day int) (Solver, error) {
 		return day17.New(), nil
 	case 18:
 		return day18.New(), nil
+	case 19:
+		return day19.New(), nil
 	default:
 		return nil, fmt.Errorf("invalid day: %d", day)
 	}
