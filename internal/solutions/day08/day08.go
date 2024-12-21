@@ -1,17 +1,14 @@
 package day08
 
 import (
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/aoc"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-type Point struct {
-	x, y int
-}
-
-func isWithinBounds(p Point, width, height int) bool {
-	return p.x >= 0 && p.x < width && p.y >= 0 && p.y < height
+func isWithinBounds(p aoc.Point, width, height int) bool {
+	return p.X >= 0 && p.X < width && p.Y >= 0 && p.Y < height
 }
 
 func parseGrid(s *Solver) [][]rune {
@@ -34,14 +31,14 @@ func New() *Solver {
 }
 
 func (s *Solver) Part1() (interface{}, error) {
-	antennas := make(map[rune][]Point)
-	antinodeSet := make(map[Point]bool)
+	antennas := make(map[rune][]aoc.Point)
+	antinodeSet := make(map[aoc.Point]bool)
 	grid := parseGrid(s)
 
 	for y, row := range grid {
 		for x, cell := range row {
 			if cell != '.' {
-				antennas[cell] = append(antennas[cell], Point{x, y})
+				antennas[cell] = append(antennas[cell], aoc.Point{x, y})
 			}
 		}
 	}
@@ -50,9 +47,9 @@ func (s *Solver) Part1() (interface{}, error) {
 		for i := 0; i < len(points); i++ {
 			for j := i + 1; j < len(points); j++ {
 				p1, p2 := points[i], points[j]
-				dx, dy := p2.x-p1.x, p2.y-p1.y
-				antinode1 := Point{p1.x - dx, p1.y - dy}
-				antinode2 := Point{p2.x + dx, p2.y + dy}
+				dx, dy := p2.X-p1.X, p2.Y-p1.Y
+				antinode1 := aoc.Point{p1.X - dx, p1.Y - dy}
+				antinode2 := aoc.Point{p2.X + dx, p2.Y + dy}
 
 				if isWithinBounds(antinode1, len(grid[0]), len(grid)) {
 					antinodeSet[antinode1] = true
@@ -68,14 +65,14 @@ func (s *Solver) Part1() (interface{}, error) {
 }
 
 func (s *Solver) Part2() (interface{}, error) {
-	antennas := make(map[rune][]Point)
-	antinodeSet := make(map[Point]bool)
+	antennas := make(map[rune][]aoc.Point)
+	antinodeSet := make(map[aoc.Point]bool)
 	grid := parseGrid(s)
 
 	for y, row := range grid {
 		for x, cell := range row {
 			if cell != '.' {
-				antennas[cell] = append(antennas[cell], Point{x, y})
+				antennas[cell] = append(antennas[cell], aoc.Point{x, y})
 			}
 		}
 	}
@@ -89,10 +86,10 @@ func (s *Solver) Part2() (interface{}, error) {
 			for j := i + 1; j < len(points); j++ {
 				p1, p2 := points[i], points[j]
 
-				dx := p2.x - p1.x
-				dy := p2.y - p1.y
+				dx := p2.X - p1.X
+				dy := p2.Y - p1.Y
 
-				gcd := GCD(abs(dx), abs(dy))
+				gcd := GCD(aoc.Abs(dx), aoc.Abs(dy))
 				if gcd != 0 {
 					dx /= gcd
 					dy /= gcd
@@ -101,15 +98,15 @@ func (s *Solver) Part2() (interface{}, error) {
 				curr := p1
 				for isWithinBounds(curr, len(grid[0]), len(grid)) {
 					antinodeSet[curr] = true
-					curr.x -= dx
-					curr.y -= dy
+					curr.X -= dx
+					curr.Y -= dy
 				}
 
 				curr = p1
 				for isWithinBounds(curr, len(grid[0]), len(grid)) {
 					antinodeSet[curr] = true
-					curr.x += dx
-					curr.y += dy
+					curr.X += dx
+					curr.Y += dy
 				}
 			}
 		}
@@ -123,11 +120,4 @@ func GCD(a, b int) int {
 		a, b = b, a%b
 	}
 	return a
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
 }

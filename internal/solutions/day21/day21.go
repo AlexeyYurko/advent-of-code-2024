@@ -1,6 +1,7 @@
 package day21
 
 import (
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/aoc"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -8,12 +9,8 @@ import (
 	"unicode"
 )
 
-type Point struct {
-	x, y int
-}
-
 type padMappings struct {
-	numeric, directional map[string]Point
+	numeric, directional map[string]aoc.Point
 }
 
 const (
@@ -28,6 +25,7 @@ func New() *Solver {
 	input, _ := os.ReadFile(filepath.Join("internal", "solutions", "day21", "input.txt"))
 	return &Solver{input: string(input)}
 }
+
 func extractFirstNumberFromString(line string) int {
 	var build strings.Builder
 	for _, char := range line {
@@ -45,22 +43,15 @@ func extractFirstNumberFromString(line string) int {
 	return 0
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
-
 func initializePadMappings() padMappings {
-	numeric := map[string]Point{
+	numeric := map[string]aoc.Point{
 		"A": {2, 0}, "0": {1, 0}, "1": {0, 1},
 		"2": {1, 1}, "3": {2, 1}, "4": {0, 2},
 		"5": {1, 2}, "6": {2, 2}, "7": {0, 3},
 		"8": {1, 3}, "9": {2, 3},
 	}
 
-	directional := map[string]Point{
+	directional := map[string]aoc.Point{
 		"A": {2, 1}, "^": {1, 1}, "<": {0, 0},
 		"v": {1, 0}, ">": {2, 0},
 	}
@@ -90,18 +81,18 @@ func (s *Solver) Part2() (interface{}, error) {
 	return result, nil
 }
 
-func calculateButtonPresses(input []string, start string, padMap map[string]Point, isNumeric bool) []string {
+func calculateButtonPresses(input []string, start string, padMap map[string]aoc.Point, isNumeric bool) []string {
 	current := padMap[start]
 	var output []string
 
 	for _, char := range input {
 		dest := padMap[char]
-		diffX, diffY := dest.x-current.x, dest.y-current.y
+		diffX, diffY := dest.X-current.X, dest.Y-current.Y
 
 		var horizontal []string
 		var vertical []string
 
-		for i := 0; i < abs(diffX); i++ {
+		for i := 0; i < aoc.Abs(diffX); i++ {
 			if diffX >= 0 {
 				horizontal = append(horizontal, ">")
 			} else {
@@ -109,7 +100,7 @@ func calculateButtonPresses(input []string, start string, padMap map[string]Poin
 			}
 		}
 
-		for i := 0; i < abs(diffY); i++ {
+		for i := 0; i < aoc.Abs(diffY); i++ {
 			if diffY >= 0 {
 				vertical = append(vertical, "^")
 			} else {
@@ -118,10 +109,10 @@ func calculateButtonPresses(input []string, start string, padMap map[string]Poin
 		}
 
 		if isNumeric {
-			if current.y == 0 && dest.x == 0 {
+			if current.Y == 0 && dest.X == 0 {
 				output = append(output, vertical...)
 				output = append(output, horizontal...)
-			} else if current.x == 0 && dest.y == 0 {
+			} else if current.X == 0 && dest.Y == 0 {
 				output = append(output, horizontal...)
 				output = append(output, vertical...)
 			} else if diffX < 0 {
@@ -132,10 +123,10 @@ func calculateButtonPresses(input []string, start string, padMap map[string]Poin
 				output = append(output, horizontal...)
 			}
 		} else {
-			if current.x == 0 && dest.y == 1 {
+			if current.X == 0 && dest.Y == 1 {
 				output = append(output, horizontal...)
 				output = append(output, vertical...)
-			} else if current.y == 1 && dest.x == 0 {
+			} else if current.Y == 1 && dest.X == 0 {
 				output = append(output, vertical...)
 				output = append(output, horizontal...)
 			} else if diffX < 0 {
@@ -165,7 +156,7 @@ func calculateTotalPressCount(input []string, padMaps padMappings, robots int) i
 	return count
 }
 
-func calculatePressCountWithRobots(input []string, maxRobots int, robot int, cache map[string][]int, directionalMap map[string]Point) int {
+func calculatePressCountWithRobots(input []string, maxRobots int, robot int, cache map[string][]int, directionalMap map[string]aoc.Point) int {
 	seqKey := strings.Join(input, "")
 
 	if val, ok := cache[seqKey]; ok {
