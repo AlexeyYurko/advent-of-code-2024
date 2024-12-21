@@ -1,14 +1,11 @@
 package day06
 
 import (
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/aoc"
 	"os"
 	"path/filepath"
 	"strings"
 )
-
-type Point struct {
-	y, x int
-}
 
 type directionType struct {
 	dX int
@@ -23,7 +20,7 @@ var left = directionType{-1, 0}
 var directions = []directionType{up, right, down, left}
 
 type VisitedState struct {
-	point     Point
+	point     aoc.Point
 	direction int
 }
 
@@ -36,31 +33,31 @@ func New() *Solver {
 	return &Solver{input: string(input)}
 }
 
-func parseGrid(s *Solver) (map[Point]rune, int, int) {
+func parseGrid(s *Solver) (map[aoc.Point]rune, int, int) {
 	lines := strings.Split(strings.TrimSpace(s.input), "\n")
 	maxY := len(lines)
 	maxX := len(lines[0])
 
-	grid := make(map[Point]rune)
+	grid := make(map[aoc.Point]rune)
 	for y, line := range lines {
 		for x, cell := range line {
-			grid[Point{y, x}] = cell
+			grid[aoc.Point{y, x}] = cell
 		}
 	}
 	return grid, maxX, maxY
 }
 
-func findStart(grid map[Point]rune) Point {
+func findStart(grid map[aoc.Point]rune) aoc.Point {
 	for k, v := range grid {
 		if v == '^' {
 			return k
 		}
 	}
-	return Point{}
+	return aoc.Point{}
 }
 
-func walk(grid map[Point]rune, start Point, maxX, maxY int) []Point {
-	var positions []Point
+func walk(grid map[aoc.Point]rune, start aoc.Point, maxX, maxY int) []aoc.Point {
+	var positions []aoc.Point
 
 	directionOrder := 0
 	grid[start] = 'X'
@@ -68,30 +65,30 @@ func walk(grid map[Point]rune, start Point, maxX, maxY int) []Point {
 	currentPosition := start
 
 	for {
-		nextX := currentPosition.x + directions[directionOrder].dX
-		nextY := currentPosition.y + directions[directionOrder].dY
+		nextX := currentPosition.X + directions[directionOrder].dX
+		nextY := currentPosition.Y + directions[directionOrder].dY
 
 		if nextX < 0 || nextX >= maxX || nextY < 0 || nextY >= maxY {
 			break
 		}
 
-		nextCell := grid[Point{nextY, nextX}]
+		nextCell := grid[aoc.Point{nextY, nextX}]
 		if nextCell == '#' {
 			directionOrder = (directionOrder + 1) % 4
 			continue
 		}
 
 		if nextCell != 'X' {
-			grid[Point{nextY, nextX}] = 'X'
-			positions = append(positions, Point{nextY, nextX})
+			grid[aoc.Point{nextY, nextX}] = 'X'
+			positions = append(positions, aoc.Point{nextY, nextX})
 		}
 
-		currentPosition = Point{nextY, nextX}
+		currentPosition = aoc.Point{nextY, nextX}
 	}
 	return positions
 }
 
-func hasLoop(grid map[Point]rune, start Point, maxX, maxY int) bool {
+func hasLoop(grid map[aoc.Point]rune, start aoc.Point, maxX, maxY int) bool {
 	visited := make(map[VisitedState]bool)
 	pos := start
 	directionOrder := 0
@@ -105,16 +102,16 @@ func hasLoop(grid map[Point]rune, start Point, maxX, maxY int) bool {
 
 		visited[state] = true
 
-		nextPos := Point{
-			x: pos.x + directions[directionOrder].dX,
-			y: pos.y + directions[directionOrder].dY,
+		nextPos := aoc.Point{
+			X: pos.X + directions[directionOrder].dX,
+			Y: pos.Y + directions[directionOrder].dY,
 		}
 
-		if nextPos.x < 0 || nextPos.x >= maxX || nextPos.y < 0 || nextPos.y >= maxY {
+		if nextPos.X < 0 || nextPos.X >= maxX || nextPos.Y < 0 || nextPos.Y >= maxY {
 			return false
 		}
 
-		if grid[Point{nextPos.y, nextPos.x}] == '#' {
+		if grid[aoc.Point{nextPos.Y, nextPos.X}] == '#' {
 			directionOrder = (directionOrder + 1) % 4
 		} else {
 			pos = nextPos

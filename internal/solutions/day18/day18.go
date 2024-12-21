@@ -2,15 +2,12 @@ package day18
 
 import (
 	"fmt"
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/aoc"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 )
-
-type Point struct {
-	x, y int
-}
 
 const (
 	gridSize = 70
@@ -18,11 +15,11 @@ const (
 )
 
 var (
-	startPoint = Point{0, 0}
-	goalPoint  = Point{70, 70}
+	startPoint = aoc.Point{0, 0}
+	goalPoint  = aoc.Point{70, 70}
 )
 
-var directions = []Point{
+var directions = []aoc.Point{
 	{1, 0},  // right
 	{-1, 0}, // left
 	{0, 1},  // down
@@ -38,12 +35,8 @@ func New() *Solver {
 	return &Solver{input: string(input)}
 }
 
-func (p Point) add(other Point) Point {
-	return Point{p.x + other.x, p.y + other.y}
-}
-
-func parseInput(s *Solver) (map[Point]bool, error) {
-	walls := make(map[Point]bool)
+func parseInput(s *Solver) (map[aoc.Point]bool, error) {
+	walls := make(map[aoc.Point]bool)
 	lines := strings.Split(strings.TrimSpace(s.input), "\n")
 
 	for i, line := range lines {
@@ -57,25 +50,25 @@ func parseInput(s *Solver) (map[Point]bool, error) {
 		}
 		x, _ := strconv.Atoi(parts[0])
 		y, _ := strconv.Atoi(parts[1])
-		walls[Point{x, y}] = true
+		walls[aoc.Point{x, y}] = true
 	}
 	return walls, nil
 }
 
-func findShortestPath(walls map[Point]bool) (int, error) {
+func findShortestPath(walls map[aoc.Point]bool) (int, error) {
 	steps := 0
-	front := make([]Point, 0, gridSize*4)
+	front := make([]aoc.Point, 0, gridSize*4)
 	front = append(front, startPoint)
-	seen := make(map[Point]bool, gridSize*gridSize)
+	seen := make(map[aoc.Point]bool, gridSize*gridSize)
 	seen[startPoint] = true
 
 	for len(front) > 0 {
-		newFront := make([]Point, 0, len(front)*4)
+		newFront := make([]aoc.Point, 0, len(front)*4)
 		steps++
 
 		for _, pos := range front {
 			for _, dir := range directions {
-				next := pos.add(dir)
+				next := pos.Add(dir)
 
 				if next == goalPoint {
 					return steps, nil
@@ -94,8 +87,8 @@ func findShortestPath(walls map[Point]bool) (int, error) {
 	return 0, fmt.Errorf("no path found")
 }
 
-func isValidPosition(p Point) bool {
-	return p.x >= 0 && p.x <= gridSize && p.y >= 0 && p.y <= gridSize
+func isValidPosition(p aoc.Point) bool {
+	return p.X >= 0 && p.X <= gridSize && p.Y >= 0 && p.Y <= gridSize
 }
 
 func (s *Solver) Part1() (interface{}, error) {
@@ -107,7 +100,7 @@ func (s *Solver) Part1() (interface{}, error) {
 }
 
 func (s *Solver) Part2() (interface{}, error) {
-	var coordinates []Point
+	var coordinates []aoc.Point
 	lines := strings.Split(strings.TrimSpace(s.input), "\n")
 	for _, line := range lines {
 		parts := strings.Split(line, ",")
@@ -116,13 +109,13 @@ func (s *Solver) Part2() (interface{}, error) {
 		}
 		x, _ := strconv.Atoi(parts[0])
 		y, _ := strconv.Atoi(parts[1])
-		coordinates = append(coordinates, Point{x, y})
+		coordinates = append(coordinates, aoc.Point{x, y})
 	}
 
 	pathCache := make(map[int]bool)
 
 	left, right := 0, len(coordinates)-1
-	var lastBlocking Point
+	var lastBlocking aoc.Point
 
 	for left <= right {
 		mid := left + (right-left)/2
@@ -137,7 +130,7 @@ func (s *Solver) Part2() (interface{}, error) {
 			continue
 		}
 
-		testGrid := make(map[Point]bool, mid+1)
+		testGrid := make(map[aoc.Point]bool, mid+1)
 		for i := 0; i <= mid; i++ {
 			testGrid[coordinates[i]] = true
 		}
@@ -153,5 +146,5 @@ func (s *Solver) Part2() (interface{}, error) {
 		}
 	}
 
-	return fmt.Sprintf("%d,%d", lastBlocking.x, lastBlocking.y), nil
+	return fmt.Sprintf("%d,%d", lastBlocking.X, lastBlocking.Y), nil
 }

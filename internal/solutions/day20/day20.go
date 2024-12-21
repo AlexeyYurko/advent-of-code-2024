@@ -1,31 +1,13 @@
 package day20
 
 import (
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/aoc"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-type Point struct {
-	x, y int
-}
-
-func (p Point) Add(q Point) Point {
-	return Point{p.x + q.x, p.y + q.y}
-}
-
-func (p Point) Manhattan(q Point) int {
-	return abs(p.x-q.x) + abs(p.y-q.y)
-}
-
-func abs(x int) int {
-	if x < 0 {
-		return -x
-	}
-	return x
-}
-
-var directions = [4]Point{
+var directions = [4]aoc.Point{
 	{0, -1},
 	{1, 0},
 	{0, 1},
@@ -47,10 +29,10 @@ const (
 	DefaultQueueSize = 1000
 )
 
-func buildDist(grid map[Point]rune, start Point) map[Point]int {
-	dist := make(map[Point]int, len(grid))
-	queue := make([]Point, 0, DefaultQueueSize)
-	visited := make(map[Point]struct{}, len(grid))
+func buildDist(grid map[aoc.Point]rune, start aoc.Point) map[aoc.Point]int {
+	dist := make(map[aoc.Point]int, len(grid))
+	queue := make([]aoc.Point, 0, DefaultQueueSize)
+	visited := make(map[aoc.Point]struct{}, len(grid))
 
 	queue = append(queue, start)
 	dist[start] = 0
@@ -72,15 +54,15 @@ func buildDist(grid map[Point]rune, start Point) map[Point]int {
 	return dist
 }
 
-func parseGrid(s *Solver) (map[Point]rune, Point) {
+func parseGrid(s *Solver) (map[aoc.Point]rune, aoc.Point) {
 	lines := strings.Fields(s.input)
 
-	grid := make(map[Point]rune, len(lines)*len(lines[0]))
-	var start Point
+	grid := make(map[aoc.Point]rune, len(lines)*len(lines[0]))
+	var start aoc.Point
 
 	for y, line := range lines {
 		for x, r := range line {
-			p := Point{x, y}
+			p := aoc.Point{x, y}
 			if r == StartPoint {
 				start = p
 			}
@@ -91,9 +73,9 @@ func parseGrid(s *Solver) (map[Point]rune, Point) {
 	return grid, start
 }
 
-func solve(dist map[Point]int, maxDist int) int {
+func solve(dist map[aoc.Point]int, maxDist int) int {
 	count := 0
-	points := make([]Point, 0, len(dist))
+	points := make([]aoc.Point, 0, len(dist))
 
 	for p := range dist {
 		points = append(points, p)

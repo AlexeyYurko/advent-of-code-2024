@@ -1,45 +1,38 @@
 package day15
 
 import (
+	"github.com/AlexeyYurko/advent-of-code-2024/internal/aoc"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
 var (
-	deltaPoints = map[rune]Point{
+	deltaPoints = map[rune]aoc.Point{
 		'^': {0, -1}, '>': {1, 0}, 'v': {0, 1}, '<': {-1, 0},
 		'[': {1, 0}, ']': {-1, 0},
 	}
 )
 
-type Point struct {
-	x, y int
-}
-
-func (p Point) Add(other Point) Point {
-	return Point{p.x + other.x, p.y + other.y}
-}
-
-func parseGrid(gridInput string) (map[Point]rune, Point) {
-	grid := make(map[Point]rune, len(gridInput))
-	robot := Point{}
+func parseGrid(gridInput string) (map[aoc.Point]rune, aoc.Point) {
+	grid := make(map[aoc.Point]rune, len(gridInput))
+	robot := aoc.Point{}
 	lines := strings.Fields(gridInput)
 	for y, line := range lines {
 		for x, r := range line {
 			if r == '@' {
-				robot = Point{x, y}
+				robot = aoc.Point{x, y}
 				r = '.'
 			}
-			grid[Point{x, y}] = r
+			grid[aoc.Point{x, y}] = r
 		}
 	}
 	return grid, robot
 }
 
-func processMove(grid map[Point]rune, robot Point, move rune) (map[Point]rune, Point, bool) {
-	queue := []Point{robot}
-	boxes := make(map[Point]rune, len(grid)/4)
+func processMove(grid map[aoc.Point]rune, robot aoc.Point, move rune) (map[aoc.Point]rune, aoc.Point, bool) {
+	queue := []aoc.Point{robot}
+	boxes := make(map[aoc.Point]rune, len(grid)/4)
 
 	for len(queue) > 0 {
 		p := queue[0]
@@ -65,7 +58,7 @@ func processMove(grid map[Point]rune, robot Point, move rune) (map[Point]rune, P
 		}
 	}
 
-	updates := make(map[Point]rune, len(boxes))
+	updates := make(map[aoc.Point]rune, len(boxes))
 	for b := range boxes {
 		grid[b] = '.'
 		updates[b.Add(deltaPoints[move])] = boxes[b]
@@ -76,11 +69,11 @@ func processMove(grid map[Point]rune, robot Point, move rune) (map[Point]rune, P
 	return grid, robot.Add(deltaPoints[move]), true
 }
 
-func calculateGPS(grid map[Point]rune) int {
+func calculateGPS(grid map[aoc.Point]rune) int {
 	gps := 0
 	for p, r := range grid {
 		if r == 'O' || r == '[' {
-			gps += 100*p.y + p.x
+			gps += 100*p.Y + p.X
 		}
 	}
 	return gps
