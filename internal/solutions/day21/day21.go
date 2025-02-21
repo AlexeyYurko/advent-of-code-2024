@@ -156,7 +156,7 @@ func calculateTotalPressCount(input []string, padMaps padMappings, robots int) i
 	return count
 }
 
-func calculatePressCountWithRobots(input []string, maxRobots int, robot int, cache map[string][]int, directionalMap map[string]aoc.Point) int {
+func calculatePressCountWithRobots(input []string, maxRobots, robot int, cache map[string][]int, directionalMap map[string]aoc.Point) int {
 	seqKey := strings.Join(input, "")
 
 	if val, ok := cache[seqKey]; ok {

@@ -69,7 +69,7 @@ func countValidTowelPatterns(pattern string, root *TrieNode, cache map[string]in
 	return isPossibleCount
 }
 
-func countDesignsWithValidPatterns(towels []string, designs []string) (result int) {
+func countDesignsWithValidPatterns(towels, designs []string) (result int) {
 	cache := make(map[string]int)
 	root := createTowelPatternTrie(towels)
 
@@ -81,7 +81,7 @@ func countDesignsWithValidPatterns(towels []string, designs []string) (result in
 	return result
 }
 
-func sumAllValidPatternCombinations(towels []string, designs []string) (result int) {
+func sumAllValidPatternCombinations(towels, designs []string) (result int) {
 	cache := make(map[string]int)
 	root := createTowelPatternTrie(towels)
 

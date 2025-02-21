@@ -79,6 +79,10 @@ func calculateGPS(grid map[aoc.Point]rune) int {
 	return gps
 }
 
+type Solver struct {
+	input string
+}
+
 func (s *Solver) solve(useDoubleWidth bool) (interface{}, error) {
 	parts := strings.Split(strings.TrimSpace(s.input), "\n\n")
 	gridInput := parts[0]
@@ -100,10 +104,6 @@ func (s *Solver) solve(useDoubleWidth bool) (interface{}, error) {
 	}
 
 	return calculateGPS(grid), nil
-}
-
-type Solver struct {
-	input string
 }
 
 func New() *Solver {

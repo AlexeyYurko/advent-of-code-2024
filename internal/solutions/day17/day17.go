@@ -67,16 +67,16 @@ func executeProgram(registers map[string]int, program []int) string {
 	return strings.Join(outputs, ",")
 }
 
-func parseInput(s string) (map[string]int, []int) {
+func parseInput(s string) (registers map[string]int, program []int) {
 	lines := strings.Split(strings.TrimSpace(s), "\n")
 
-	registers := make(map[string]int, 3)
+	registers = make(map[string]int, 3)
 	for i, reg := range []string{"A", "B", "C"} {
 		registers[reg], _ = strconv.Atoi(lines[i][12:])
 	}
 
 	programStr := strings.Split(lines[4][9:], ",")
-	program := make([]int, len(programStr))
+	program = make([]int, len(programStr))
 	for i, str := range programStr {
 		program[i], _ = strconv.Atoi(str)
 	}

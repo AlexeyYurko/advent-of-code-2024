@@ -104,7 +104,6 @@ func (s *Solver) Part2() (interface{}, error) {
 				safeReports++
 				break
 			}
-
 		}
 	}
 	return safeReports, nil

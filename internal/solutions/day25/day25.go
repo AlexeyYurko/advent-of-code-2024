@@ -25,11 +25,6 @@ var (
 	}
 )
 
-type Block struct {
-	grid    [][]rune
-	heights int
-}
-
 type Solver struct {
 	input string
 }
