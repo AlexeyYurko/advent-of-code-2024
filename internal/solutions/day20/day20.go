@@ -62,7 +62,7 @@ func parseGrid(s *Solver) (map[aoc.Point]rune, aoc.Point) {
 
 	for y, line := range lines {
 		for x, r := range line {
-			p := aoc.Point{x, y}
+			p := aoc.Point{X: x, Y: y}
 			if r == StartPoint {
 				start = p
 			}

@@ -30,7 +30,7 @@ func (s *Solver) defragment(files []File) []File {
 			if fs[file].ID != -1 && fs[free].ID == -1 && fs[free].Size >= fs[file].Size {
 				fs = slices.Insert(fs, free, fs[file])
 				fs[file+1].ID, fs[free+1].ID = -1, -1
-				fs[free+1].Size = fs[free+1].Size - fs[file+1].Size
+				fs[free+1].Size -= fs[file+1].Size
 			}
 		}
 	}

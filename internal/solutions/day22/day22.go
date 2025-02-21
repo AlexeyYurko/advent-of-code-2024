@@ -25,7 +25,7 @@ func New() *Solver {
 	return &Solver{input: string(input)}
 }
 
-func calculateSecretNumber(currentNumber int, iterations int) int {
+func calculateSecretNumber(currentNumber, iterations int) int {
 	for i := 0; i < iterations; i++ {
 		currentNumber = ((currentNumber << 6) ^ currentNumber) & 0xFFFFFF
 		currentNumber = ((currentNumber >> 5) ^ currentNumber) & 0xFFFFFF
@@ -34,7 +34,7 @@ func calculateSecretNumber(currentNumber int, iterations int) int {
 	return currentNumber
 }
 
-func populateSecretNumberCache(currentNumber int, iterations int, windowCache *map[Window]int) []Pair {
+func populateSecretNumberCache(currentNumber, iterations int, windowCache map[Window]int) []Pair {
 	visited := make(map[Window]bool)
 	deltaBananaPairs := make([]Pair, 0, iterations-1)
 	currentDeltaWindow := make([]int, 0, 4)
@@ -49,7 +49,7 @@ func populateSecretNumberCache(currentNumber int, iterations int, windowCache *m
 		if len(currentDeltaWindow) == 4 {
 			key := Window{A: currentDeltaWindow[0], B: currentDeltaWindow[1], C: currentDeltaWindow[2], D: currentDeltaWindow[3]}
 			if !visited[key] {
-				(*windowCache)[key] += currentNumber % 10
+				windowCache[key] += currentNumber % 10
 				visited[key] = true
 			}
 			currentDeltaWindow = currentDeltaWindow[1:]
@@ -86,7 +86,7 @@ func (s *Solver) Part2() (interface{}, error) {
 	result := 0
 	cache := make(map[Window]int)
 	for _, num := range input {
-		populateSecretNumberCache(num, 2000, &cache)
+		populateSecretNumberCache(num, 2000, cache)
 	}
 
 	for _, value := range cache {

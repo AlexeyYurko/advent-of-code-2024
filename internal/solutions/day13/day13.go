@@ -14,7 +14,7 @@ type Coordinate struct {
 
 type MachineMap map[string]Coordinate
 
-func parseMachines(input string) ([]MachineMap, error) {
+func parseMachines(input string) []MachineMap {
 	var machines []MachineMap
 	lines := strings.Split(strings.TrimSpace(input), "\n")
 
@@ -28,16 +28,16 @@ func parseMachines(input string) ([]MachineMap, error) {
 				key = strings.Fields(parts[0])[1]
 			}
 
-			x, y, _ := parseCoordinates(parts[1])
+			x, y := parseCoordinates(parts[1])
 
 			locations[key] = Coordinate{X: x, Y: y}
 		}
 		machines = append(machines, locations)
 	}
-	return machines, nil
+	return machines
 }
 
-func parseCoordinates(input string) (x, y int, err error) {
+func parseCoordinates(input string) (x, y int) {
 	coords := strings.Split(strings.TrimSpace(input), ",")
 
 	xStr := strings.TrimSpace(coords[0])
@@ -50,7 +50,7 @@ func parseCoordinates(input string) (x, y int, err error) {
 		x, _ = strconv.Atoi(strings.Replace(xStr, "X=", "", -1))
 		y, _ = strconv.Atoi(strings.Replace(yStr, "Y=", "", -1))
 	}
-	return x, y, nil
+	return x, y
 }
 
 func countTokens(moves [][2]int) int {
@@ -97,11 +97,11 @@ func New() *Solver {
 	return &Solver{input: string(input)}
 }
 func (s *Solver) Part1() (interface{}, error) {
-	machines, _ := parseMachines(s.input)
+	machines := parseMachines(s.input)
 	return findWinningMoves(machines, 0)
 }
 
 func (s *Solver) Part2() (interface{}, error) {
-	machines, _ := parseMachines(s.input)
+	machines := parseMachines(s.input)
 	return findWinningMoves(machines, 10000000000000)
 }

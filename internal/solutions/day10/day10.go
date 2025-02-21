@@ -39,7 +39,6 @@ func (p Point) getValidMoves(grid [][]int) []Point {
 		if newX >= 0 && newX < width &&
 			newY >= 0 && newY < height &&
 			grid[newY][newX] == nextVal {
-
 			next := Point{
 				x:    newX,
 				y:    newY,

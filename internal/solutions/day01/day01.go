@@ -57,8 +57,7 @@ func (s *Solver) Part2() (interface{}, error) {
 		return nil, err
 	}
 
-	var simScoreMap map[int]int
-	simScoreMap = make(map[int]int)
+	simScoreMap := make(map[int]int)
 
 	for i := 0; i < len(slc2); i++ {
 		simScoreMap[slc2[i]] += 1

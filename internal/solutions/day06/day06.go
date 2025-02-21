@@ -33,15 +33,15 @@ func New() *Solver {
 	return &Solver{input: string(input)}
 }
 
-func parseGrid(s *Solver) (map[aoc.Point]rune, int, int) {
+func parseGrid(s *Solver) (grid map[aoc.Point]rune, maxX, maxY int) {
 	lines := strings.Split(strings.TrimSpace(s.input), "\n")
-	maxY := len(lines)
-	maxX := len(lines[0])
+	maxY = len(lines)
+	maxX = len(lines[0])
 
-	grid := make(map[aoc.Point]rune)
+	grid = make(map[aoc.Point]rune)
 	for y, line := range lines {
 		for x, cell := range line {
-			grid[aoc.Point{y, x}] = cell
+			grid[aoc.Point{Y: y, X: x}] = cell
 		}
 	}
 	return grid, maxX, maxY
@@ -72,18 +72,18 @@ func walk(grid map[aoc.Point]rune, start aoc.Point, maxX, maxY int) []aoc.Point 
 			break
 		}
 
-		nextCell := grid[aoc.Point{nextY, nextX}]
+		nextCell := grid[aoc.Point{Y: nextY, X: nextX}]
 		if nextCell == '#' {
 			directionOrder = (directionOrder + 1) % 4
 			continue
 		}
 
 		if nextCell != 'X' {
-			grid[aoc.Point{nextY, nextX}] = 'X'
-			positions = append(positions, aoc.Point{nextY, nextX})
+			grid[aoc.Point{Y: nextY, X: nextX}] = 'X'
+			positions = append(positions, aoc.Point{Y: nextY, X: nextX})
 		}
 
-		currentPosition = aoc.Point{nextY, nextX}
+		currentPosition = aoc.Point{Y: nextY, X: nextX}
 	}
 	return positions
 }
@@ -111,7 +111,7 @@ func hasLoop(grid map[aoc.Point]rune, start aoc.Point, maxX, maxY int) bool {
 			return false
 		}
 
-		if grid[aoc.Point{nextPos.Y, nextPos.X}] == '#' {
+		if grid[aoc.Point{Y: nextPos.Y, X: nextPos.X}] == '#' {
 			directionOrder = (directionOrder + 1) % 4
 		} else {
 			pos = nextPos
